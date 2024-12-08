@@ -1,0 +1,14 @@
+site:
+  title: "Tindex"
+
+server:
+  files:
+    dev:
+      contentRoot: "build/processedResources/js/main/public"
+      script: "build/kotlin-webpack/js/developmentExecutable/miniapp.js"
+      api: "build/libs/miniapp.jar"
+    prod:
+      script: "build/kotlin-webpack/js/productionExecutable/miniapp.js"
+      siteRoot: ".kobweb/site"
+
+  port: 8080
