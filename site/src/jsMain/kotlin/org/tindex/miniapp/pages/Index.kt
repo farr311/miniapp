@@ -1,10 +1,13 @@
 package org.tindex.miniapp.pages
 
 import androidx.compose.runtime.Composable
+import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.StyleVariable
+import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
+import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.compose.ui.graphics.Colors
@@ -23,14 +26,19 @@ import com.varabyte.kobweb.silk.style.toAttrs
 import com.varabyte.kobweb.silk.style.toModifier
 import com.varabyte.kobweb.silk.theme.colors.ColorMode
 import com.varabyte.kobweb.silk.theme.colors.ColorSchemes
+import com.varabyte.kobweb.silk.theme.shapes.RectF
+import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.cssRem
 import org.jetbrains.compose.web.css.fr
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.vh
 import org.jetbrains.compose.web.dom.Div
+import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import org.tindex.miniapp.HeadlineTextStyle
 import org.tindex.miniapp.SubheadlineTextStyle
+import org.tindex.miniapp.components.Chart
+import org.tindex.miniapp.components.HomePageHeader
 import org.tindex.miniapp.components.layouts.PageLayout
 import org.tindex.miniapp.toSitePalette
 
@@ -70,10 +78,60 @@ private fun GridCell(color: Color, row: Int, column: Int, width: Int? = null, he
 @Composable
 fun HomePage() {
     PageLayout("Home") {
+        HomePageHeader()
+
+        Column(
+            modifier = Modifier.fillMaxWidth()
+                .padding(leftRight = 16.px),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(2.px)
+        ) {
+            SpanText(
+                text = "Points",
+                modifier = Modifier.fontSize(14.px)
+                    .lineHeight(20.px)
+                    .color(Color.rgb(0xFFFFFF))
+            )
+            SpanText(
+                text = "500",
+                modifier = Modifier.fontSize(30.px)
+                    .lineHeight(36.px)
+                    .color(Color.rgb(0xFFFFFF))
+                    .fontWeight(FontWeight.Bold)
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.px)
+            ) {
+                SpanText(
+                    text = "32.3",
+                    modifier = Modifier.fontSize(16.px)
+                        .lineHeight(24.px)
+                        .color(Color.rgb(0x7BE3A1))
+                )
+                Column(
+                    modifier = Modifier.padding(
+                        leftRight = 6.px,
+                        topBottom = 1.px
+                    ).backgroundColor(
+                        Color.argb(0x3355BF7C)
+                    ).clip(RectF(cornerRadius = 4.px))
+                ) {
+                    SpanText(
+                        text = "3.12%",
+                        modifier = Modifier.fontSize(14.px)
+                            .lineHeight(20.px)
+                            .color(Color.rgb(0x7BE3A1))
+                    )
+                }
+            }
+            Chart()
+        }
+
+
         Row(HeroContainerStyle.toModifier()) {
             Box {
                 val sitePalette = ColorMode.current.toSitePalette()
-
                 Column(Modifier.gap(2.cssRem)) {
                     Div(HeadlineTextStyle.toAttrs()) {
                         SpanText(
