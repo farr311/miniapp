@@ -1,230 +1,54 @@
 package org.tindex.miniapp.components
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.FontWeight
-import com.varabyte.kobweb.compose.css.background
-import com.varabyte.kobweb.compose.css.height
-import com.varabyte.kobweb.compose.css.width
+import com.varabyte.kobweb.compose.css.TouchAction
+import com.varabyte.kobweb.compose.css.UserSelect
+import com.varabyte.kobweb.compose.css.functions.LinearGradient
+import com.varabyte.kobweb.compose.dom.ref
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
-import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
-import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Color
+import com.varabyte.kobweb.compose.ui.graphics.Colors
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
 import com.varabyte.kobweb.compose.ui.modifiers.color
+import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.lineHeight
-import com.varabyte.kobweb.compose.ui.modifiers.outlineColor
-import com.varabyte.kobweb.compose.ui.modifiers.outlineStyle
-import com.varabyte.kobweb.compose.ui.modifiers.outlineWidth
+import com.varabyte.kobweb.compose.ui.modifiers.onMouseLeave
+import com.varabyte.kobweb.compose.ui.modifiers.onMouseMove
+import com.varabyte.kobweb.compose.ui.modifiers.onTouchEnd
+import com.varabyte.kobweb.compose.ui.modifiers.onTouchMove
+import com.varabyte.kobweb.compose.ui.modifiers.onTouchStart
+import com.varabyte.kobweb.compose.ui.modifiers.outline
+import com.varabyte.kobweb.compose.ui.modifiers.touchAction
+import com.varabyte.kobweb.compose.ui.modifiers.userSelect
+import com.varabyte.kobweb.compose.ui.modifiers.width
+import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.silk.components.graphics.Canvas2d
 import com.varabyte.kobweb.silk.components.graphics.ONE_FRAME_MS_60_FPS
+import com.varabyte.kobweb.silk.components.graphics.RenderScope
 import com.varabyte.kobweb.silk.components.text.SpanText
-import com.varabyte.kobweb.silk.theme.shapes.Path
-import com.varabyte.kobweb.silk.theme.shapes.PolygonF
-import com.varabyte.kobweb.silk.theme.shapes.Shape
-import com.varabyte.kobweb.silk.theme.shapes.clip
-import org.jetbrains.compose.web.css.LineStyle
-import org.jetbrains.compose.web.css.color
 import org.jetbrains.compose.web.css.px
-import org.jetbrains.compose.web.dom.Canvas
 import org.jetbrains.compose.web.dom.Div
+import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.CanvasState
 import org.w3c.dom.Path2D
-import kotlin.js.Date
+import org.w3c.dom.get
 import kotlin.math.PI
-import kotlin.random.Random
+import kotlin.math.abs
+import kotlin.math.round
 
 
-@Composable
-fun HomePageHeader() {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.px)
-    ) {
-        SpanText(
-            text = "Total balance",
-            modifier = Modifier
-                .color(Color.rgb(0xFFFFFF))
-                .fontSize(14.px)
-                .lineHeight(20.px)
-                .fontWeight(FontWeight.Medium)
-        )
-        Div {
-            SpanText(
-                text = "$",
-                modifier = Modifier
-                    .color(Color.rgb(0x888888))
-                    .fontSize(30.px)
-                    .lineHeight(36.px)
-                    .fontWeight(FontWeight.Bold)
-            )
-            SpanText(
-                text = "10.",
-                modifier = Modifier
-                    .color(Color.rgb(0xFFFFFF))
-                    .fontSize(30.px)
-                    .lineHeight(36.px)
-                    .fontWeight(FontWeight.Bold)
-            )
-            SpanText(
-                text = "00",
-                modifier = Modifier
-                    .color(Color.rgb(0xFFFFFF))
-                    .fontSize(20.px)
-                    .lineHeight(28.px)
-                    .fontWeight(FontWeight.Bold)
-            )
-            ///Text("Total balance")
-            //Text("Total balance")
-        }
-        SpanText(
-            text = "+3.12",
-            modifier = Modifier
-                .color(Color.rgb(0x888888))
-                .fontSize(16.px)
-                .lineHeight(24.px)
-                .fontWeight(FontWeight.Medium)
-        )
-    }
-}
-
-@Composable
-fun Chart() {
-    val data: MutableList<Pair<Float, Float>> = mutableListOf()
-    data.add(Pair(0f, 0f))
-    for (i in 1..200) {
-
-        //Math
-        data.add(Pair(i.toFloat(), Random.nextFloat() * 100))
-    }
-    data.add(Pair(0f, 200f))
-
-    val s = PolygonF(
-        *data.toTypedArray()
-    )
-
-   /* Box(
-        modifier = Modifier.fillMaxWidth()
-            .height(500.px)
-            //.border(width = 2.px, color = Color.rgb(0xF7931A), style = LineStyle.Solid)
-            .backgroundColor(Color.rgb(100, 100, 100))
-            .outlineStyle(LineStyle.Solid)
-            .outlineColor(Color.rgb(0xF7931A))
-            .outlineWidth(20.px)
-            .clip(s)
-
-    )*/
-
-    Canvas2d(300, 300, minDeltaMs = ONE_FRAME_MS_60_FPS * 5) {
-        val date = Date()
-        val r = 150.0
-
-        // Let's be a little lazy and use some colors from the palette which is already color mode aware
-        val colorBorder = Color.rgb(255, 0, 0)
-        val colorTicks = Color.rgb(255, 0, 0)
-        val colorHourHand = Color.rgb(255, 0, 0)
-        val colorMinuteHand = Color.rgb(255, 0, 0)
-        val colorSecondHand = Color.rgb(255, 0, 0)
-
-        ctx.save {
-            ctx.strokeStyle = colorTicks
-            ctx.fillStyle = Color.rgb(100, 100, 100)
-
-            ctx.clearRect(0.0, 0.0, width.toDouble(), height.toDouble())
-            ctx.translate(r, r)
-            ctx.lineWidth = 8.0
-
-            // Hour marks
-            ctx.save {
-                for (i in 0 until 12) {
-                    ctx.beginPath()
-                    ctx.rotate(PI / 6)
-                    ctx.moveTo(100.0, 0.0)
-                    ctx.lineTo(120.0, 0.0)
-                    ctx.stroke()
-                }
-            }
-
-            // Minute marks
-            ctx.save {
-                ctx.lineWidth = 5.0
-                for (i in 0 until 60) {
-                    if (i % 5 != 0) {
-                        ctx.beginPath()
-                        ctx.moveTo(117.0, 0.0)
-                        ctx.lineTo(120.0, 0.0)
-                        ctx.stroke()
-                    }
-                    ctx.rotate(PI / 30)
-                }
-            }
-
-            val sec = date.getSeconds()
-            val min = date.getMinutes()
-            val hr = date.getHours() % 12
-
-            // Hour hand
-            ctx.save {
-                ctx.strokeStyle = colorHourHand
-                ctx.rotate(hr * (PI / 6) + (PI / 360) * min + (PI / 21600) * sec)
-                ctx.lineWidth = 14.0
-                ctx.beginPath()
-                ctx.moveTo(-20.0, 0.0)
-                ctx.lineTo(80.0, 0.0)
-                ctx.stroke()
-            }
-
-            // write Minutes
-            ctx.save {
-                ctx.strokeStyle = colorMinuteHand
-                ctx.rotate((PI / 30) * min + (PI / 1800) * sec)
-                ctx.lineWidth = 10.0
-                ctx.beginPath()
-                ctx.moveTo(-28.0, 0.0)
-                ctx.lineTo(112.0, 0.0)
-                ctx.stroke()
-            }
-
-            // Write seconds
-            ctx.save {
-                ctx.rotate(sec * PI / 30)
-                ctx.strokeStyle = colorSecondHand
-                ctx.fillStyle = colorSecondHand
-                ctx.lineWidth = 6.0
-                ctx.beginPath()
-                ctx.moveTo(-30.0, 0.0)
-                ctx.lineTo(83.0, 0.0)
-                ctx.stroke()
-                ctx.beginPath()
-                ctx.arc(0.0, 0.0, 10.0, 0.0, PI * 2, true)
-                ctx.fill()
-
-                // The loop at the end of the second hand
-                ctx.beginPath()
-                ctx.arc(95.0, 0.0, 10.0, 0.0, PI * 2, true)
-                ctx.stroke()
-                ctx.fillStyle = Color.argb(0, 0, 0, 0)
-                ctx.arc(0.0, 0.0, 3.0, 0.0, PI * 2, true)
-                ctx.fill()
-            }
-
-            // The outer circle that frames the clock
-            ctx.beginPath()
-            ctx.lineWidth = 14.0
-            ctx.strokeStyle = colorBorder
-            ctx.arc(0.0, 0.0, 142.0, 0.0, PI * 2, true)
-            ctx.stroke()
-        }
-    }
-
-}
 
 fun CanvasState.save(block: () -> Unit) {
     save()
@@ -233,14 +57,329 @@ fun CanvasState.save(block: () -> Unit) {
 }
 
 @Composable
+fun Chart(
+    dataSets: List<ChartDataSet<*>>,
+    offsets: Offsets = Offsets(),
+    backgroundColor: Color = Colors.Transparent,
+    height: Int = 100,
+    width: Int = 100
+) {
+    var actualWidth by remember { mutableStateOf(0.0) }
+    var actualHeight by remember { mutableStateOf(0.0) }
+
+    var canvasStart by remember { mutableStateOf(0.0) }
+    var canvasTop by remember { mutableStateOf(0.0) }
+
+    var pointToHighlight by remember { mutableStateOf(-1)}
+    var active by remember { mutableStateOf(false)}
+
+    val size = dataSets[0].data.size
+    dataSets.forEach {
+        if (it.data.size != size) {
+            throw RuntimeException("All data sets must have the same data length")
+        }
+    }
+
+    fun processMoveEvent(x: Int, y: Int) {
+        val insideHorizontally = x >= canvasStart && x <= canvasStart + actualWidth
+        val insideVertically = y >= canvasTop && y <= canvasTop + actualHeight
+        val focused = insideHorizontally && insideVertically
+        if (focused) {
+            active = true
+            pointToHighlight = resolveClosestPoint(x - canvasStart, actualWidth, dataSets[0].data.size, offsets)
+        } else {
+            pointToHighlight = -1
+            active = false
+        }
+    }
+
+
+    /*
+    * TODO:
+    *  1. Add the vertical line for selection
+    *  2. Add legend
+    *  3. Add lines
+    *  4. Add numbers
+    * */
+
+    Canvas2d(
+        width = if (width == 0) 500 else width,
+        height = if (height == 0) 500 else height,
+        ref = ref { element ->
+            actualWidth = element.getBoundingClientRect().width
+            actualHeight = element.getBoundingClientRect().height
+            canvasStart = element.getBoundingClientRect().left
+            canvasTop = element.getBoundingClientRect().top
+        },
+        minDeltaMs = ONE_FRAME_MS_60_FPS * 5,
+        modifier = Modifier
+            .then(if (width != 0) Modifier.width(width.px) else Modifier.fillMaxWidth())
+            .then(if (height != 0) Modifier.height(height.px) else Modifier.fillMaxHeight())
+            .userSelect(userSelect = UserSelect.None)
+            .touchAction(TouchAction.None)
+            .outline(0.px)
+            .styleModifier {
+                property("-webkit-touch-callout", "none")
+                property("-webkit-user-select", "none")
+                property("-khtml-user-select", "none")
+                property("-moz-user-select", "none")
+                property("-ms-user-select", "none")
+                property("-webkit-tap-highlight-color", "rgba(255, 255, 255, 0)")
+            }
+            .onMouseMove {
+                processMoveEvent(it.x.toInt(), it.y.toInt())
+            }.onMouseLeave {
+                pointToHighlight = -1
+                active = false
+            }.onTouchStart {
+                active = true
+            }
+            .onTouchEnd {
+                active = false
+            }
+            .onTouchMove {
+                val x = it.touches[it.touches.length - 1]!!.clientX
+                val y = it.touches[it.touches.length - 1]!!.clientY
+                processMoveEvent(x, y)
+            }
+            .backgroundColor(backgroundColor)
+    ) {
+        ctx.save {
+            for (dataSet in dataSets) {
+                buildLineChart(
+                    scope = this,
+                    width = actualWidth,
+                    height = actualHeight,
+                    offsets = offsets,
+                    active = active,
+                    dataSet = dataSet
+                )
+
+                buildPoints(
+                    ctx = ctx,
+                    dataSet = dataSets[0],
+                    width = actualWidth,
+                    height = actualHeight,
+                    offsets = offsets,
+                    highlightedPoint = pointToHighlight,
+                )
+            }
+        }
+    }
+}
+
+private fun resolveClosestPoint(x: Double, width: Double, size: Int, offsets: Offsets): Int {
+    val horizontalScaleFactor = (width - offsets.start - offsets.end) / (size - 1)
+    val closestPoint = round(x / horizontalScaleFactor).toInt() - 1
+    if (closestPoint > width || closestPoint < 0) {
+        return -1
+    }
+    return closestPoint
+}
+
+private fun <T : Number> buildLineChart(
+    scope: RenderScope<CanvasRenderingContext2D>,
+    width: Double,
+    height: Double,
+    dataSet: ChartDataSet<T>,
+    offsets: Offsets,
+    active: Boolean,
+) {
+    val mappedData = dataSet.mappedData
+    val delta = dataSet.delta
+
+    val strokePath = buildPath(mappedData, width, height, offsets, delta)
+    val areaPath = buildPath(mappedData, width, height, offsets, delta, false)
+
+    val style = if (active) dataSet.style.active else dataSet.style.default
+
+    val fillStyle = scope.ctx.resolveStyle(style.areaStyle)
+    val lineStyle = scope.ctx.resolveStyle(style.lineStyle)
+
+    scope.ctx.clearRect(0.0, 0.0, width, height)
+    scope.ctx.translate(0.0, height)
+    scope.ctx.scale(scope.width / width, scope.height / height)
+    scope.ctx.fillStyle = fillStyle
+    scope.ctx.strokeStyle = lineStyle
+    scope.ctx.lineWidth = 2.0
+    scope.ctx.fill(areaPath)
+    scope.ctx.stroke(strokePath)
+}
+
+private fun CanvasRenderingContext2D.resolveStyle(style: FillStyle): dynamic {
+    return when (style) {
+        is CanvasGradientFillStyle -> {
+            createLinearGradient(0.0, -100.0, 0.0, 0.0).also {
+                for (entry in style.entries) {
+                    it.addColorStop(entry.offset, entry.color.toString())
+                }
+            }
+        }
+        is PlainFillStyle -> {
+            style.color
+        }
+    }
+}
+
+private fun buildPoints(
+    ctx: CanvasRenderingContext2D,
+    dataSet: ChartDataSet<*>,
+    width: Double,
+    height: Double,
+    highlightedPoint: Int,
+    offsets: Offsets,
+) {
+    val mappedData = dataSet.mappedData
+    val delta = dataSet.delta
+    val points = dataSet.points
+
+    val horizontalScaleFactor = (width - offsets.start - offsets.end) / (mappedData.size - 1)
+    val verticalScaleFactor = (height - offsets.top - offsets.bottom) / delta
+
+    for (i in mappedData.indices) {
+        val x = (i).toDouble() * horizontalScaleFactor + offsets.start
+        val y = mappedData[i] * verticalScaleFactor - offsets.bottom
+
+        val active = highlightedPoint -1 == i
+        val point = if (active) points.active else points.default
+
+        ctx.fillStyle = ctx.resolveStyle(point.areaStyle)
+        ctx.strokeStyle = ctx.resolveStyle(point.strokeStyle)
+
+
+        ctx.beginPath()
+        ctx.arc(x, y, point.size, 0.0, 2 * PI)
+
+        ctx.fill()
+        ctx.stroke()
+    }
+}
+
+private fun buildPath(
+    mappedData: List<Double>,
+    width: Double,
+    height: Double,
+    offsets: Offsets,
+    delta: Double,
+    stroke: Boolean = true
+): Path2D {
+    val horizontalScaleFactor = (width - offsets.start - offsets.end) / (mappedData.size - 1)
+    val verticalScaleFactor = (height - offsets.top - offsets.bottom) / delta
+
+    val ctx = Path2D()
+
+    val xStart = offsets.start
+    val yStart = mappedData[0] * verticalScaleFactor - offsets.bottom
+
+    if (!stroke) {
+        ctx.moveTo(offsets.start, -offsets.bottom)
+        ctx.lineTo(xStart, yStart)
+    } else {
+        ctx.moveTo(xStart, yStart)
+    }
+
+    for (i in 0 until mappedData.size - 1) {
+        val x = (i + 1).toDouble() * horizontalScaleFactor + offsets.start
+        val y = mappedData[i + 1] * verticalScaleFactor - offsets.bottom
+        ctx.lineTo(x, y)
+    }
+
+    if (!stroke) {
+        ctx.lineTo(width - offsets.end, height - offsets.bottom)
+        ctx.lineTo(offsets.start, -offsets.bottom)
+    }
+
+    return ctx
+}
+
+data class ChartDataSet<T : Number>(
+    val data: List<T>,
+    val style: ChartStyle = ChartStyle(),
+    val points: Points = Points()
+) {
+    val mappedData: List<Double>
+    val delta: Double
+
+    init {
+        val minPoint = data.minOfOrNull { it.toDouble() }
+        val maxPoint = data.maxOfOrNull { it.toDouble() }
+
+        delta = maxPoint!! - minPoint!!
+        mappedData = data.map { -abs((it.toDouble() - minPoint)) }
+    }
+
+    data class ChartStyle(
+        val active: Style = Style(
+            lineStyle = PlainFillStyle(Color.rgb(255, 255, 255)),
+            areaStyle = PlainFillStyle(Color.rgba(0, 0, 0, 0)),
+        ),
+        val default: Style = Style(
+            lineStyle = PlainFillStyle(Color.rgb(255, 255, 255)),
+            areaStyle = PlainFillStyle(Color.rgba(0, 0, 0, 0)),
+        )
+    )
+
+    data class Style(
+        val lineStyle: FillStyle = PlainFillStyle(Color.rgb(255, 255, 255)),
+        val areaStyle: FillStyle = PlainFillStyle(Color.rgba(0, 0, 0, 0)),
+    )
+
+    data class Points(
+        val default: PointStyle = PointStyle(),
+        val active: PointStyle = PointStyle()
+    )
+
+    data class PointStyle(
+        val display: Boolean = false,
+        val size: Double = 0.0,
+        val strokeStyle: FillStyle = PlainFillStyle(Color.rgba(0, 0, 0, 0)),
+        val areaStyle: FillStyle = PlainFillStyle(Color.rgba(0, 0, 0, 0))
+    )
+}
+
+sealed interface FillStyle
+
+data class PlainFillStyle(val color: Color) : FillStyle
+
+data class CanvasGradientFillStyle(
+    val type: GradientType = GradientType.LINEAR,
+    val direction: LinearGradient.Direction,
+    val entries: List<Entry>
+) : FillStyle {
+    enum class GradientType {
+        LINEAR
+    }
+
+    data class Entry(
+        val offset: Double,
+        val color: Color
+    )
+}
+
+class Offsets(
+    val vertical: Double? = null,
+    val horizontal: Double? = null,
+    start: Double = 0.0,
+    end: Double = 0.0,
+    top: Double = 0.0,
+    bottom: Double = 0.0
+) {
+    val start: Double = start
+        get() = this.horizontal ?: field
+    val end: Double = end
+        get() = this.horizontal ?: field
+
+    val top: Double = top
+        get() = this.vertical ?: field
+    val bottom: Double = bottom
+        get() = this.vertical ?: field
+}
+
+
+/*
+@Composable
 fun TokenBlock() {
     Row() {
 
     }
-}
-
-class ChartShape(
-    override val path: Path?
-) : Shape {
-
-}
+}*/
